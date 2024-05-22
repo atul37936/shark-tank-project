@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Description Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F4F4F4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .data {
+            margin-bottom: 20px;
+        }
+        .data label {
+            font-weight: bold;
+        }
+        .data p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Description page</h1>
+    <div class="container"  style="text-align: center;">
+        <img id="image" src="https://m.media-amazon.com/images/I/61pq3ae629L._AC_UY327_FMwebp_QL65_.jpg" alt="Product Image">
+        <h1 id="title"></h1>
+        <div class="data">
+            <label></label>
+            <p id="category"></p>
+        </div>
+        <div class="data">
+            <label></label>
+            <p id="price"></p>
+        </div>
+        <div class="data">
+            <label></label>
+            <p id="founder"></p>
+        </div>
+        <div class="data">
+            <label>Description:</label>
+            <p id="description">HoloKitab is an edTech platform that enables book publishers and manufacturers from various industries to deliver Augmented Reality content to their users in a cost-effective way.</p>
+        </div>
+        <div style="display:flex;justify-content: center;">
+            <button id="AddToCart" style="border: 1ps solid white;background-color: black;color: teal;padding:5px;cursor: pointer;">ADD TO Cart</button>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    
+    const param = new URLSearchParams(window.location.search)
+    window.addEventListener("load",()=>{
+       
+        document.getElementById("image").src = param.get("img")
+        document.getElementById("title").innerHTML = param.get("title")
+        document.getElementById("price").innerHTML = param.get("price")
+        document.getElementById("category").innerHTML = param.get("category")
+        document.getElementById("founder").innerHTML = param.get("founder")
+    })
+   let AddToCartbtn =document.getElementById("AddToCart")
+
+    AddToCartbtn.addEventListener("click",()=>{
+       
+        let Cartdata = {
+            "title": param.get("title"),
+            "image": param.get("img"),
+            "price": param.get("price"),
+            "founder": param.get("founder"),
+            "category": param.get("category")
+        }
+        console.log(Cartdata)
+        fetch("https://shark-tank-ges7.onrender.com/cart",{
+            method: "POST",
+            headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(Cartdata)
+}).then((res)=>res.json())
+.then((data)=>alert("data added to cart.."))
+.catch((err)=> console.log(err))
+        })
+</script>

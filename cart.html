@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Card</title>
+<!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+
+  <div id="mainSection">
+  </div>
+
+</body>
+</html>
+
+<script>
+  
+function fetchdata(){
+    fetch("https://shark-tank-ges7.onrender.com/cart")
+    .then((res)=>res.json())
+    .then((data)=>{
+        cardList(data)
+        productdata=data
+    })
+    .catch((err)=>console.log(err))
+}
+fetchdata()
+
+function cardList(data){
+    let store = data.map((el)=>card(el.id,el.image,el.title,el.price,el.founder,el.category,el.description))
+
+    mainSection.innerHTML=store.join("")
+}
+
+function card(id,image,title,price,founder,category,description){
+    return `
+    <div class="card" data-id="${id}">
+        <div class="card-img">
+        <img src="${image}" alt="pitch">
+        </div>
+        <div class="card-body">
+        <h4 class="card-title">${title}</h4>
+        <p class="card-founder"> ${founder}</p>
+        <p class="card-category">${category}</p>
+        <p class="card-price">${price}</p>
+        <button class="card-button" data-id="${id}">Delete</button>
+        </div>
+    </div>`
+}
+
+// =================== DELETE ===================
+
+document.addEventListener("click",(e)=>{
+    if(e.target.classList.contains("card-button")) {
+        dataProduct(e.target.dataset.id);
+    }
+})
+
+function dataProduct(id){
+    fetch(`https://shark-tank-ges7.onrender.com/cart/${id}`,{
+        method:'DELETE',
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+        alert("DELETED...")
+        console.log(data)
+        fetchdata()
+    })
+    .catch((err)=>console.log(err));
+}
+
+// ================= DELETE END =====================
+
+
+</script>
